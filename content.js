@@ -1,3 +1,7 @@
+/**
+ * Viator "Reply by AI" Chrome Extension - Content script
+ * Copyright © Anywhere.tours
+ */
 (function () {
   const INJECTED_ATTR = 'data-viator-ai-reply-injected';
 

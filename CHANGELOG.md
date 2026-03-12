@@ -25,3 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Security
 
 - API key is used only in the background service worker; it is never injected into the page or content script.
+
+---
+
+Copyright © Anywhere.tours

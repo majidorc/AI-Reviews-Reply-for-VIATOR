@@ -1,3 +1,7 @@
+/**
+ * Viator "Reply by AI" Chrome Extension - Options page
+ * Copyright © Anywhere.tours
+ */
 document.addEventListener('DOMContentLoaded', () => {
   const apiKeyInput = document.getElementById('apiKey');
   const saveBtn = document.getElementById('save');

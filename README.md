@@ -58,3 +58,7 @@ MIT (or as specified in the repository).
 ## Repository
 
 [AI Reviews Reply for VIATOR](https://github.com/majidorc/AI-Reviews-Reply-for-VIATOR)
+
+---
+
+Copyright © Anywhere.tours
