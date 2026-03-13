@@ -28,18 +28,31 @@
       messageEl.style.display = 'none';
       cancelledEl.style.display = 'block';
     } else if (sessionId) {
-      fetch('/api/thank-you?session_id=' + encodeURIComponent(sessionId))
-        .then(r => r.json())
-        .then(data => {
-          if (data.key) {
-            keyEl.textContent = data.key;
-            keyBlock.style.display = 'block';
-            messageEl.style.display = 'none';
-          } else {
-            messageEl.textContent = 'Key not found or already retrieved. If you need help, contact support.';
-          }
-        })
-        .catch(() => { messageEl.textContent = 'Failed to load your key. Please try again or contact support.'; });
+      let attempt = 0;
+      const maxAttempts = 12;
+      const delayMs = 2000;
+      function fetchKey() {
+        attempt++;
+        if (attempt > 1) messageEl.textContent = 'Loading your license key... (' + attempt + '/' + maxAttempts + ')';
+        fetch('/api/thank-you?session_id=' + encodeURIComponent(sessionId))
+          .then(r => r.json())
+          .then(data => {
+            if (data.key) {
+              keyEl.textContent = data.key;
+              keyBlock.style.display = 'block';
+              messageEl.style.display = 'none';
+            } else if (attempt < maxAttempts) {
+              setTimeout(fetchKey, delayMs);
+            } else {
+              messageEl.textContent = 'Key not found or already retrieved. If you need help, contact support.';
+            }
+          })
+          .catch(() => {
+            if (attempt < maxAttempts) setTimeout(fetchKey, delayMs);
+            else messageEl.textContent = 'Failed to load your key. Please try again or contact support.';
+          });
+      }
+      fetchKey();
     } else {
       messageEl.textContent = 'No session. If you just paid, go to the extension Options and check your email for the license key.';
     }
