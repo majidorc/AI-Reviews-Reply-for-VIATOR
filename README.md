@@ -51,6 +51,8 @@ Install from the [Chrome Web Store](https://chrome.google.com/webstore) once the
 - Your API key is stored locally in the browser and is only used to request reply text from Google's Gemini API.
 - When you click "Reply by AI", the visible review title and body (and reviewer/supplier names from the page) are sent to the Gemini API to generate the reply. No data is sent to any other servers.
 
+See **[PRIVACY.md](PRIVACY.md)** for the full privacy policy.
+
 ## License
 
 MIT (or as specified in the repository).
