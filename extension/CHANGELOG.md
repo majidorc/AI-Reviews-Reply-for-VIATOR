@@ -4,6 +4,21 @@ All notable changes to the Viator "Reply by AI" Chrome Extension are documented 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-03-13
+
+### Added
+
+- **Pro edition**: Optional $1 upgrade via license key. Unlock more options (Pro-only features to be added in future releases).
+- Pro section in options: "Get Pro" link to ai.majidorc.com checkout, license key input, Activate/Deactivate. Pro status stored in `chrome.storage.sync` (`proActivated`, `proLicenseKey`).
+- License validation: background script calls `https://ai.majidorc.com/api/extension/validate?key=...`; options page activates Pro when the key is valid.
+- Host permission for `https://ai.majidorc.com/*` for license API.
+
+### Changed
+
+- Version set to 1.1.0. Future updates or new features should bump version (e.g. 1.2.0, 1.1.1) and add an entry here.
+
+---
+
 ## [1.0.0] - 2026-03-13
 
 ### Added

@@ -4,6 +4,7 @@
  */
 const GEMINI_MODEL = 'gemini-2.5-flash-lite';
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const LICENSE_VALIDATE_URL = 'https://ai.majidorc.com/api/extension/validate';
 
 function buildPrompt(reviewTitle, reviewBody) {
   const parts = [];
@@ -16,6 +17,19 @@ ${context}`;
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'validateLicense') {
+    const key = (message.licenseKey || '').trim();
+    if (!key) {
+      sendResponse({ valid: false });
+      return true;
+    }
+    fetch(`${LICENSE_VALIDATE_URL}?key=${encodeURIComponent(key)}`)
+      .then((res) => res.json())
+      .then((data) => sendResponse(data))
+      .catch(() => sendResponse({ valid: false }));
+    return true;
+  }
+
   if (message.action !== 'generateReply') {
     return;
   }

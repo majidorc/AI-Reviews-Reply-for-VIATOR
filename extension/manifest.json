@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Viator \"Reply by AI\" Chrome Extension",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Generate AI-powered replies to Viator reviews using Gemini.",
   "icons": {
     "16": "icon128.png",
@@ -11,7 +11,8 @@
   "permissions": ["storage"],
   "host_permissions": [
     "https://supplier.viator.com/reviews",
-    "https://generativelanguage.googleapis.com/*"
+    "https://generativelanguage.googleapis.com/*",
+    "https://ai.majidorc.com/*"
   ],
   "content_scripts": [
     {

@@ -1,0 +1,10 @@
+{
+  "name": "viator-reply-by-ai-license-api",
+  "version": "1.0.0",
+  "description": "License validation and Stripe checkout for Viator Reply by AI Pro",
+  "private": true,
+  "dependencies": {
+    "stripe": "^14.0.0",
+    "@vercel/kv": "^1.0.0"
+  }
+}
