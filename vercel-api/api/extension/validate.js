@@ -3,7 +3,7 @@
  * Returns { "valid": true } or { "valid": false }.
  * CORS allowed for chrome-extension:// so the extension can call from background.
  */
-const { kv } = require('@vercel/kv');
+const { redis } = require('../../lib/redis');
 
 const CORS_HEADERS = {
   'Access-Control-Allow-Origin': '*',
@@ -33,7 +33,7 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const stored = await kv.get(`license:${key}`);
+    const stored = await redis.get(`license:${key}`);
     const valid = !!stored;
     res.writeHead(200, CORS_HEADERS);
     res.end(JSON.stringify({ valid }));

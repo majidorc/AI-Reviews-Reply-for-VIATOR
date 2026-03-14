@@ -3,7 +3,7 @@
  * Returns the license key for a completed checkout session (one-time retrieval).
  * Used by the thank-you page to display the key to the user.
  */
-const { kv } = require('@vercel/kv');
+const { redis } = require('../../lib/redis');
 
 module.exports = async (req, res) => {
   if (req.method !== 'GET') {
@@ -20,8 +20,8 @@ module.exports = async (req, res) => {
   }
 
   try {
-    const key = await kv.get(`session:${sessionId}`);
-    if (key) await kv.del(`session:${sessionId}`);
+    const key = await redis.get(`session:${sessionId}`);
+    if (key) await redis.del(`session:${sessionId}`);
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ key: key || null }));
   } catch (e) {

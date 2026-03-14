@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Privacy Policy – Viator Reply by AI</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 24px; max-width: 640px; margin: 0 auto; line-height: 1.5; color: #1f2937; }
+    h1 { font-size: 1.5rem; margin-top: 0; }
+    h2 { font-size: 1.15rem; margin-top: 1.5em; margin-bottom: 0.5em; }
+    h3 { font-size: 1rem; margin-top: 1em; margin-bottom: 0.35em; }
+    p { margin: 0.5em 0; }
+    ul { margin: 0.5em 0; padding-left: 1.5em; }
+    table { width: 100%; border-collapse: collapse; margin: 0.75em 0; font-size: 0.95em; }
+    th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; }
+    th { background: #f9fafb; font-weight: 600; }
+    hr { border: none; border-top: 1px solid #e5e7eb; margin: 1.5em 0; }
+    a { color: #0d9488; }
+    .summary { background: #f0fdfa; padding: 12px 16px; border-radius: 8px; margin: 1em 0; }
+    .updated { color: #6b7280; font-size: 0.9em; margin-bottom: 0.5em; }
+    .copyright { margin-top: 2em; font-size: 0.9em; color: #6b7280; }
+  </style>
+</head>
+<body>
+  <h1>Privacy Policy</h1>
+  <p class="updated"><strong>Viator "Reply by AI" Chrome Extension</strong><br>Last updated: March 2026<br>© <a href="https://anywhere.tours">Anywhere.tours</a></p>
+  <p>This privacy policy describes how the Viator "Reply by AI" Chrome Extension ("the Extension") handles information when you use it.</p>
+
+  <h2>Summary</h2>
+  <div class="summary">
+    <ul style="margin: 0; padding-left: 1.25em;">
+      <li>The Extension runs only on <strong>https://supplier.viator.com/reviews</strong>.</li>
+      <li>Your <strong>Gemini API key</strong> is stored <strong>only on your device</strong> in the browser’s extension storage. We do not have access to it.</li>
+      <li>When you use <strong>Reply by AI</strong>, the <strong>review text and related on-screen information</strong> are sent <strong>only to Google’s Gemini API</strong> to generate a reply. We do not receive, store, or process this data on our own servers.</li>
+      <li>We do <strong>not</strong> collect, sell, or share your personal data.</li>
+    </ul>
+  </div>
+
+  <h2>1. Information the Extension Uses</h2>
+  <h3>1.1 Stored on your device (Chrome storage)</h3>
+  <p><strong>Gemini API key</strong> — If you enter it in the Extension’s options page, it is saved locally in your browser (Chrome’s extension storage). It is used only by the Extension to call Google’s Gemini API when you click "Reply by AI". The key never leaves your device except in those API requests to Google.</p>
+
+  <h3>1.2 Read from the Viator page (only when you click "Reply by AI")</h3>
+  <ul>
+    <li><strong>Review content</strong> — The visible review title and body in the reply modal.</li>
+    <li><strong>Reviewer name</strong> — The name shown next to the review (e.g. username) to personalize the salutation.</li>
+    <li><strong>Supplier/business name</strong> — The name shown in the top-right area of the Viator supplier page, used in the sign-off (e.g. "Best regards, [Your business] Team").</li>
+  </ul>
+  <p>This information is read only from the page you are viewing and is <strong>sent only to Google’s Gemini API</strong> to generate the reply text. It is <strong>not</strong> sent to Anywhere.tours or any other third party.</p>
+
+  <h3>1.3 What we do not collect</h3>
+  <p>We do <strong>not</strong> collect, store, or transmit:</p>
+  <ul>
+    <li>Your name, email, or other account details</li>
+    <li>Browsing history outside the Viator supplier reviews page</li>
+    <li>Passwords or login credentials (other than your own API key, which you optionally store locally)</li>
+    <li>Payment or financial information</li>
+    <li>Any data for advertising or analytics on our side</li>
+  </ul>
+
+  <hr>
+  <h2>2. Where data is sent</h2>
+  <table>
+    <thead>
+      <tr><th>Data</th><th>Sent to</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Gemini API key</td><td>Google (Gemini API)</td><td>Authenticate your request to generate reply text</td></tr>
+      <tr><td>Review title, body, reviewer/supplier names</td><td>Google (Gemini API)</td><td>Generate a suggested reply</td></tr>
+    </tbody>
+  </table>
+  <p><strong>We (Anywhere.tours) do not operate servers that receive or store this data.</strong> The only external service that receives data when you use "Reply by AI" is <strong>Google’s Gemini API</strong>, subject to <a href="https://policies.google.com/privacy">Google’s privacy policy</a>.</p>
+
+  <hr>
+  <h2>3. Permissions</h2>
+  <p>The Extension requests:</p>
+  <ul>
+    <li><strong>Storage</strong> — To save and read your Gemini API key locally in the extension options.</li>
+    <li><strong>Access to https://supplier.viator.com/reviews</strong> — So the "Reply by AI" button and logic run only on that page.</li>
+    <li><strong>Access to https://generativelanguage.googleapis.com/</strong> — So the Extension can call the Gemini API with your key when you use "Reply by AI".</li>
+  </ul>
+  <p>No other permissions are requested.</p>
+
+  <hr>
+  <h2>4. Data retention</h2>
+  <ul>
+    <li><strong>On your device:</strong> Your API key remains in Chrome’s extension storage until you remove it (e.g. via the "Clear" button in the Extension options) or uninstall the Extension.</li>
+    <li><strong>Google:</strong> Any data sent to the Gemini API is subject to Google’s data practices; we do not control Google’s retention or processing.</li>
+  </ul>
+
+  <hr>
+  <h2>5. Your choices</h2>
+  <ul>
+    <li>You can <strong>clear</strong> your stored API key at any time in the Extension options.</li>
+    <li>You can <strong>uninstall</strong> the Extension at any time; this removes the Extension and any data it stored locally.</li>
+    <li>You choose <strong>when</strong> to use "Reply by AI"; no data is sent to Gemini until you click that button.</li>
+  </ul>
+
+  <hr>
+  <h2>6. Changes to this policy</h2>
+  <p>We may update this privacy policy from time to time. The "Last updated" date at the top will be revised when we do. Continued use of the Extension after changes constitutes acceptance of the updated policy.</p>
+
+  <hr>
+  <h2>7. Contact</h2>
+  <p>For questions about this privacy policy or the Extension:</p>
+  <p><strong>Anywhere.tours</strong> — <a href="https://anywhere.tours">https://anywhere.tours</a></p>
+
+  <p class="copyright">Copyright © Anywhere.tours</p>
+</body>
+</html>

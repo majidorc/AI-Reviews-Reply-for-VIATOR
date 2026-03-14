@@ -5,7 +5,7 @@
  * and returns the key. Customer can then use the key in the extension or revisit thank-you?session_id=...
  */
 const Stripe = require('stripe');
-const { kv } = require('@vercel/kv');
+const { redis } = require('../../lib/redis');
 const crypto = require('crypto');
 
 function generateLicenseKey() {
@@ -51,8 +51,8 @@ module.exports = async (req, res) => {
     }
 
     const licenseKey = generateLicenseKey();
-    await kv.set(`license:${licenseKey}`, { created: Date.now() });
-    await kv.set(`session:${sessionId}`, licenseKey, { ex: 3600 });
+    await redis.set(`license:${licenseKey}`, JSON.stringify({ created: Date.now() }));
+    await redis.set(`session:${sessionId}`, licenseKey, { ex: 3600 });
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ key: licenseKey }));

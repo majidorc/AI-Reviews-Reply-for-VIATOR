@@ -7,7 +7,7 @@ Backend for **Pro** license validation and Stripe checkout. Deploy this folder t
 - `STRIPE_SECRET_KEY` – Stripe secret key
 - `STRIPE_WEBHOOK_SECRET` – Webhook signing secret (Stripe Dashboard → Webhooks → endpoint → Signing secret)
 - `STRIPE_PRICE_ID` – Price ID for your $1 one-time product (Stripe Dashboard → Products → your $1 product → Price ID)
-- Vercel KV: create a KV store in the Vercel project and link it (adds `KV_REST_API_*` and `KV_URL` automatically)
+- **Redis (Upstash):** `UPSTASH_REDIS_REST_URL` and `UPSTASH_REDIS_REST_TOKEN` – create a database at [Upstash Console](https://console.upstash.com), then in the database’s **REST API** section copy the endpoint URL and token. Add both as env vars in Vercel.
 
 Optional:
 
@@ -30,10 +30,10 @@ Optional:
 
 - `GET /api/extension/validate?key=...` – Extension calls this to validate a license key. Returns `{ "valid": true }` or `{ "valid": false }`.
 - `GET /api/checkout` – Redirects user to Stripe Checkout for the $1 product.
-- `POST /api/webhooks/stripe` – Stripe webhook; creates license key and stores it (KV).
+- `POST /api/webhooks/stripe` – Stripe webhook; creates license key and stores it in Redis.
 - `GET /api/thank-you?session_id=...` – Returns the license key for a completed session (used by thank-you page).
 - `GET /thank-you` – Thank-you page (rewrite to thank-you.html) that shows the license key after payment.
-- `GET /api/admin/issue-key?session_id=cs_xxx&secret=ADMIN_SECRET` – **Admin only.** For payments that already succeeded but no key was stored (e.g. KV was missing at the time). Verifies the session was paid, creates and stores a license key, returns it. Set env var `ADMIN_SECRET` to a random string and keep it private.
+- `GET /api/admin/issue-key?session_id=cs_xxx&secret=ADMIN_SECRET` – **Admin only.** For payments that already succeeded but no key was stored (e.g. Redis env vars were missing at the time). Verifies the session was paid, creates and stores a license key, returns it. Set env var `ADMIN_SECRET` to a random string and keep it private.
 
 ## Version
 
@@ -50,17 +50,20 @@ You used a **Product ID** (`prod_xxx`) for `STRIPE_PRICE_ID`. Stripe Checkout ne
 - In Stripe: **Products** → open your Pro product → under **Pricing**, click the price (e.g. ฿50.00) → copy the **Price ID** (it starts with `price_`).
 - In Vercel: **Project → Settings → Environment Variables** → set `STRIPE_PRICE_ID` to that **Price ID** (e.g. `price_1QR...`), not the Product ID. Redeploy.
 
-### "@vercel/kv: Missing required environment variables KV_REST_API_URL and KV_REST_API_TOKEN"
+### "Missing Redis" or license/checkout not working
 
-Vercel KV is not connected to the project. The API uses KV to store and look up license keys.
+The API needs Upstash Redis to store license keys.
 
-- In Vercel: open your project → **Storage** tab → **Create Database** → choose **KV** (Redis).
-- After the store is created, open it → **Connect to Project** → select this project. That adds `KV_REST_API_URL` and `KV_REST_API_TOKEN` (and related vars) to the project.
-- **Redeploy** the project so the new env vars are used. Then checkout and the thank-you page should work.
+1. Go to [console.upstash.com](https://console.upstash.com) and create a Redis database (same region as your Vercel project if possible).
+2. In the database, open the **REST API** section and copy **Endpoint** (URL) and **Token**.
+3. In Vercel: **Project → Settings → Environment Variables** → add:
+   - `UPSTASH_REDIS_REST_URL` = the endpoint URL
+   - `UPSTASH_REDIS_REST_TOKEN` = the token
+4. **Redeploy** the project. Then checkout and the thank-you page should work.
 
 ### Customer paid but saw "Key not found or already retrieved"
 
-If the payment succeeded in Stripe but the thank-you page never showed a key (e.g. KV wasn’t connected when they paid), you can issue a key for that payment:
+If the payment succeeded in Stripe but the thank-you page never showed a key (e.g. Redis env vars weren’t set when they paid), you can issue a key for that payment:
 
 1. In Vercel, set env var **`ADMIN_SECRET`** to a long random string (e.g. from a password generator). Redeploy.
 2. In Stripe: **Payments** → click the payment → note the **Checkout session** ID (starts with `cs_`), or from **Developers → Webhooks** open a `checkout.session.completed` event and copy `data.object.id` (the session ID).

@@ -2,11 +2,11 @@
  * POST /api/webhooks/stripe
  * Stripe webhook: on checkout.session.completed, create a license key and store it in KV.
  * Key is stored under session_id so thank-you page can retrieve it.
- * Requires STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and Vercel KV.
+ * Requires STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and Upstash Redis (UPSTASH_REDIS_REST_*).
  * Raw body is required for signature verification.
  */
 const Stripe = require('stripe');
-const { kv } = require('@vercel/kv');
+const { redis } = require('../../lib/redis');
 const crypto = require('crypto');
 
 function generateLicenseKey() {
@@ -69,12 +69,12 @@ module.exports = async (req, res) => {
 
   try {
     const licenseKey = generateLicenseKey();
-    await kv.set(`license:${licenseKey}`, { created: Date.now() });
-    await kv.set(`session:${sessionId}`, licenseKey, { ex: 3600 });
+    await redis.set(`license:${licenseKey}`, JSON.stringify({ created: Date.now() }));
+    await redis.set(`session:${sessionId}`, licenseKey, { ex: 3600 });
     res.writeHead(200);
     res.end();
   } catch (e) {
-    console.error('Webhook KV error:', e);
+    console.error('Webhook Redis error:', e);
     res.writeHead(500);
     res.end();
   }
