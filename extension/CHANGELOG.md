@@ -1,8 +1,21 @@
 # Changelog
 
-All notable changes to the Viator "Reply by AI" Chrome Extension are documented here.
+All notable changes to the Reply by AI Chrome Extension (Viator & GetYourGuide) are documented here.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.2.0] - 2026-03-13
+
+### Added
+
+- **GetYourGuide support**: "Reply by AI" button on GetYourGuide supplier reviews page (`https://supplier.getyourguide.com/performance/reviews`). Same flow as Viator: open the "Reply to the traveler" modal, then use the injected button to generate a reply with Gemini and insert it into the response field.
+
+### Changed
+
+- Extension name updated to "Reply by AI for Viator & GetYourGuide". Description and prompt text generalized for both platforms.
+- Content script and review extraction made site-agnostic; placeholder text (e.g. "Type your response here", "Reply will be checked with AI") is excluded when detecting review body on GYG.
+
+---
 
 ## [1.1.0] - 2026-03-13
 

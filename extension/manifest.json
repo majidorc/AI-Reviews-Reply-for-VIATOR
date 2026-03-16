@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Viator \"Reply by AI\" Chrome Extension",
-  "version": "1.1.0",
-  "description": "Generate AI-powered replies to Viator reviews using Gemini.",
+  "name": "Reply by AI for Viator & GetYourGuide",
+  "version": "1.2.0",
+  "description": "Generate AI-powered replies to Viator and GetYourGuide supplier reviews using Gemini.",
   "icons": {
     "16": "icon128.png",
     "48": "icon128.png",
@@ -11,12 +11,16 @@
   "permissions": ["storage"],
   "host_permissions": [
     "https://supplier.viator.com/reviews",
+    "https://supplier.getyourguide.com/performance/reviews",
     "https://generativelanguage.googleapis.com/*",
     "https://ai.majidorc.com/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://supplier.viator.com/reviews"],
+      "matches": [
+        "https://supplier.viator.com/reviews",
+        "https://supplier.getyourguide.com/performance/reviews"
+      ],
       "js": ["content.js"],
       "run_at": "document_idle"
     }

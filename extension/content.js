@@ -1,9 +1,14 @@
 /**
- * Viator "Reply by AI" Chrome Extension - Content script
+ * "Reply by AI" Chrome Extension - Content script (Viator & GetYourGuide)
  * Copyright © Anywhere.tours
  */
 (function () {
-  const INJECTED_ATTR = 'data-viator-ai-reply-injected';
+  const INJECTED_ATTR = 'data-ai-reply-injected';
+  const REPLY_PLACEHOLDER_TEXTS = [
+    'Type your response here',
+    'Reply will be checked with AI',
+    'Send reply',
+  ];
 
   function findReplyModal() {
     const dialog = document.querySelector('[role="dialog"]');
@@ -39,8 +44,14 @@
     if (!reviewBody) {
       const all = modal.innerText || '';
       const lines = all.split(/\n/).map((s) => s.trim()).filter(Boolean);
-      if (lines.length > 0) reviewTitle = lines[0];
-      if (lines.length > 1) reviewBody = lines.slice(1).join('\n').trim();
+      const skip = (t) => REPLY_PLACEHOLDER_TEXTS.some((p) => t === p || t.startsWith(p));
+      const contentLines = lines.filter((t) => !skip(t) && t.length > 10);
+      if (contentLines.length > 0) reviewTitle = contentLines[0];
+      if (contentLines.length > 1) reviewBody = contentLines.slice(1).join('\n').trim();
+      else if (contentLines.length === 1 && contentLines[0].length > 20) reviewBody = contentLines[0];
+    }
+    if (reviewBody && REPLY_PLACEHOLDER_TEXTS.some((p) => reviewBody.includes(p))) {
+      reviewBody = reviewBody.replace(new RegExp(REPLY_PLACEHOLDER_TEXTS.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi'), '').trim();
     }
     return { reviewTitle, reviewBody };
   }
