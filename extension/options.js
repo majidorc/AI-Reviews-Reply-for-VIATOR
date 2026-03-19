@@ -1,44 +1,23 @@
 /**
- * Viator "Reply by AI" Chrome Extension - Options page
+ * Reply by AI - Options page
  * Copyright © Anywhere.tours
  */
 document.addEventListener('DOMContentLoaded', () => {
   const apiKeyInput = document.getElementById('apiKey');
+  const companyNameInput = document.getElementById('companyName');
   const saveBtn = document.getElementById('save');
+  const saveCompanyBtn = document.getElementById('saveCompany');
   const clearBtn = document.getElementById('clear');
   const statusEl = document.getElementById('status');
-  const licenseKeyInput = document.getElementById('licenseKey');
-  const activateBtn = document.getElementById('activate');
-  const deactivateBtn = document.getElementById('deactivate');
-  const proNotActive = document.getElementById('proNotActive');
-  const proActive = document.getElementById('proActive');
-  const proStatusEl = document.getElementById('proStatus');
 
   function showStatus(message, type) {
     statusEl.textContent = message;
     statusEl.className = 'status ' + (type || '');
   }
 
-  function showProStatus(message, type) {
-    proStatusEl.textContent = message;
-    proStatusEl.className = 'status ' + (type || '');
-  }
-
-  function updateProUI(isActive) {
-    if (isActive) {
-      proNotActive.style.display = 'none';
-      proActive.style.display = 'block';
-      licenseKeyInput.value = '';
-      showProStatus('');
-    } else {
-      proNotActive.style.display = 'block';
-      proActive.style.display = 'none';
-    }
-  }
-
-  chrome.storage.sync.get(['geminiApiKey', 'proActivated'], (data) => {
+  chrome.storage.sync.get(['geminiApiKey', 'companyName'], (data) => {
     if (data.geminiApiKey) apiKeyInput.value = data.geminiApiKey;
-    updateProUI(!!data.proActivated);
+    if (data.companyName) companyNameInput.value = data.companyName;
   });
 
   saveBtn.addEventListener('click', () => {
@@ -52,42 +31,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  saveCompanyBtn.addEventListener('click', () => {
+    const value = companyNameInput.value.trim();
+    chrome.storage.sync.set({ companyName: value }, () => {
+      showStatus(value ? 'Company name saved.' : 'Company name cleared.', 'success');
+    });
+  });
+
   clearBtn.addEventListener('click', () => {
     chrome.storage.sync.remove('geminiApiKey', () => {
       apiKeyInput.value = '';
       showStatus('API key cleared.', 'success');
-    });
-  });
-
-  activateBtn.addEventListener('click', () => {
-    const key = licenseKeyInput.value.trim();
-    if (!key) {
-      showProStatus('Please enter a license key.', 'error');
-      return;
-    }
-    showProStatus('Checking...', '');
-    activateBtn.disabled = true;
-    chrome.runtime.sendMessage({ action: 'validateLicense', licenseKey: key }, (response) => {
-      activateBtn.disabled = false;
-      if (chrome.runtime.lastError) {
-        showProStatus('Error. Try again.', 'error');
-        return;
-      }
-      if (response && response.valid) {
-        chrome.storage.sync.set({ proActivated: true, proLicenseKey: key }, () => {
-          updateProUI(true);
-          showProStatus('Pro activated.', 'success');
-        });
-      } else {
-        showProStatus('Invalid or expired key.', 'error');
-      }
-    });
-  });
-
-  deactivateBtn.addEventListener('click', () => {
-    chrome.storage.sync.remove(['proActivated', 'proLicenseKey'], () => {
-      updateProUI(false);
-      showProStatus('Pro deactivated.', 'success');
     });
   });
 });

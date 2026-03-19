@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<!-- Viator "Reply by AI" Chrome Extension - Options page | Copyright © Anywhere.tours -->
+<!-- Reply by AI - Options page | Copyright © Anywhere.tours -->
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Viator Reply by AI - Settings</title>
+  <title>Reply by AI - Settings</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -39,12 +39,11 @@
     .status { margin-top: 12px; font-size: 13px; min-height: 20px; }
     .status.success { color: #059669; }
     .status.error { color: #dc2626; }
-    .pro-badge { font-size: 12px; color: #059669; font-weight: 500; }
     .section { margin-bottom: 20px; }
   </style>
 </head>
 <body>
-  <h1>Viator Reply by AI - Settings</h1>
+  <h1>Reply by AI - Settings</h1>
 
   <section class="section">
     <label for="apiKey">Gemini API key</label>
@@ -61,25 +60,14 @@
   </section>
 
   <section class="section">
-    <h2>Pro</h2>
-    <p class="hint">Unlock more options with Pro ($1).</p>
+    <label for="companyName">Company / business name (optional)</label>
+    <input type="text" id="companyName" placeholder="e.g. AnyWhere.com" autocomplete="off">
     <p class="hint">
-      <a href="https://ai.majidorc.com/api/checkout" target="_blank" rel="noopener">Get Pro</a>
+      Used in the sign-off of AI replies: <strong>Best regards, The [Your Company] Team</strong>. Leave blank to use auto-detected name when available (e.g. on Viator).
     </p>
-    <div id="proNotActive">
-      <label for="licenseKey">License key</label>
-      <input type="text" id="licenseKey" placeholder="Paste your license key" autocomplete="off">
-      <div class="buttons">
-        <button type="button" class="primary" id="activate">Activate</button>
-      </div>
+    <div class="buttons">
+      <button type="button" class="primary" id="saveCompany">Save</button>
     </div>
-    <div id="proActive" style="display: none;">
-      <p class="pro-badge">Pro active</p>
-      <div class="buttons">
-        <button type="button" class="secondary" id="deactivate">Deactivate</button>
-      </div>
-    </div>
-    <p class="status" id="proStatus"></p>
   </section>
 
   <p style="margin-top: 24px; font-size: 12px;">

@@ -4,6 +4,38 @@ All notable changes to the Reply by AI Chrome Extension (Viator & GetYourGuide) 
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-03-13
+
+### Added
+
+- **Company name in options:** Optional "Company / business name" field (e.g. "AnyWhere.com"). When set, AI replies use **Best regards, The [Your Company] Team** in the sign-off. Useful when the extension can’t detect the business name (e.g. on GetYourGuide). If left blank, the extension still uses the auto-detected name on Viator when available.
+
+---
+
+## [1.3.2] - 2026-03-13
+
+### Changed
+
+- **GetYourGuide 400-character limit:** Replies on GetYourGuide are now capped at 400 characters. The prompt instructs the model to stay under 400 characters, and the inserted text is truncated to 400 if needed so it never exceeds the platform’s limit.
+
+---
+
+## [1.3.1] - 2026-03-13
+
+### Added
+
+- **Popup on icon click:** Left-clicking the extension icon opens a popup with a short description, an "Open options" button (to set the Gemini API key), and a settings (gear) icon in the header. Same idea as other extensions: quick access to options from the toolbar.
+
+---
+
+## [1.3.0] - 2026-03-13
+
+### Removed
+
+- **Pro / license option** removed for now. Options page no longer shows Get Pro link, license key input, or Activate/Deactivate. Host permission for `https://ai.majidorc.com/*` and background `validateLicense` handler removed.
+
+---
+
 ## [1.2.0] - 2026-03-13
 
 ### Added

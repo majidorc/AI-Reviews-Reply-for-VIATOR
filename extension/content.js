@@ -167,18 +167,23 @@
       const { reviewTitle, reviewBody } = getReviewFromModal(modal);
       const reviewerName = getReviewerNameFromModal(modal);
       const supplierName = getSupplierNameFromPage();
+      const isGYG = window.location.hostname.includes('getyourguide');
+      const maxChars = isGYG ? 400 : (textarea.getAttribute('maxlength') ? parseInt(textarea.getAttribute('maxlength'), 10) : null);
       btn.disabled = true;
       btn.textContent = 'Generating…';
       messageEl.textContent = '';
       messageEl.className = '';
 
       try {
+        const { companyName } = await chrome.storage.sync.get('companyName');
         const response = await chrome.runtime.sendMessage({
           action: 'generateReply',
           reviewTitle,
           reviewBody,
           reviewerName,
           supplierName,
+          companyName: companyName || '',
+          maxCharacters: maxChars && !isNaN(maxChars) ? maxChars : undefined,
         });
         if (response?.error) {
           if (response.error === 'NO_API_KEY') {
@@ -188,7 +193,13 @@
           }
           messageEl.style.color = '#dc2626';
         } else if (response?.text) {
-          textarea.value = response.text;
+          let text = response.text;
+          const maxLen = textarea.getAttribute('maxlength');
+          if (maxLen) {
+            const n = parseInt(maxLen, 10);
+            if (!isNaN(n) && text.length > n) text = text.slice(0, n);
+          }
+          textarea.value = text;
           textarea.dispatchEvent(new Event('input', { bubbles: true }));
           messageEl.textContent = 'Reply inserted. You can edit before submitting.';
           messageEl.style.color = '#059669';

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reply by AI</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      margin: 0;
+      padding: 0;
+      width: 320px;
+      min-height: 180px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid #e5e7eb;
+      background: #f9fafb;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+    }
+    .header button {
+      width: 32px;
+      height: 32px;
+      padding: 0;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+    }
+    .header button:hover {
+      background: #e5e7eb;
+      color: #374151;
+    }
+    .main {
+      padding: 16px 14px;
+    }
+    .main p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.4;
+    }
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 10px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: white;
+      background: #0d9488;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn-primary:hover {
+      background: #0f766e;
+    }
+    .footer {
+      padding: 10px 14px;
+      border-top: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      color: #6b7280;
+    }
+    .footer a {
+      color: #0d9488;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <h1>Reply by AI</h1>
+    <button type="button" id="settings" title="Options" aria-label="Options">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+  </header>
+  <main class="main">
+    <p>Use <strong>Reply by AI</strong> on Viator or GetYourGuide review pages. Open a review, click Reply, then click the green button to generate a reply.</p>
+    <button type="button" class="btn-primary" id="openOptions">
+      Open options
+    </button>
+  </main>
+  <footer class="footer">
+    <a href="https://anywhere.tours" target="_blank" rel="noopener">Anywhere.tours</a>
+  </footer>
+  <script src="popup.js"></script>
+</body>
+</html>
