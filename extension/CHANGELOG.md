@@ -1,91 +1,64 @@
 # Changelog
 
-All notable changes to the Reply by AI Chrome Extension (Viator & GetYourGuide) are documented here.
+All notable changes to the Reply by AI Chrome Extension (Viator & GetYourGuide).
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.3.3] - 2026-03-13
 
 ### Added
+- Optional **Company / business name** field in settings (for example, `AnyWhere.com`).
+- Sign-off uses the saved value when available, for example: `Best regards, The AnyWhere.com Team`.
 
-- **Company name in options:** Optional "Company / business name" field (e.g. "AnyWhere.com"). When set, AI replies use **Best regards, The [Your Company] Team** in the sign-off. Useful when the extension can’t detect the business name (e.g. on GetYourGuide). If left blank, the extension still uses the auto-detected name on Viator when available.
-
----
+### Changed
+- Company name fallback flow improved for platforms where automatic supplier-name detection is limited (notably GetYourGuide).
 
 ## [1.3.2] - 2026-03-13
 
 ### Changed
-
-- **GetYourGuide 400-character limit:** Replies on GetYourGuide are now capped at 400 characters. The prompt instructs the model to stay under 400 characters, and the inserted text is truncated to 400 if needed so it never exceeds the platform’s limit.
-
----
+- Added strict **400-character handling** for GetYourGuide replies.
+- Prompt now asks the model to stay under the platform limit.
+- Final inserted text is hard-capped to the allowed max length.
 
 ## [1.3.1] - 2026-03-13
 
 ### Added
-
-- **Popup on icon click:** Left-clicking the extension icon opens a popup with a short description, an "Open options" button (to set the Gemini API key), and a settings (gear) icon in the header. Same idea as other extensions: quick access to options from the toolbar.
-
----
+- Toolbar **popup UI** when left-clicking the extension icon.
+- Popup includes quick instructions, **Open options** action, and a settings shortcut.
 
 ## [1.3.0] - 2026-03-13
 
 ### Removed
-
-- **Pro / license option** removed for now. Options page no longer shows Get Pro link, license key input, or Activate/Deactivate. Host permission for `https://ai.majidorc.com/*` and background `validateLicense` handler removed.
-
----
+- Pro/license flow from the extension UI and logic.
+- License validation handler and related host permission (`https://ai.majidorc.com/*`).
 
 ## [1.2.0] - 2026-03-13
 
 ### Added
-
-- **GetYourGuide support**: "Reply by AI" button on GetYourGuide supplier reviews page (`https://supplier.getyourguide.com/performance/reviews`). Same flow as Viator: open the "Reply to the traveler" modal, then use the injected button to generate a reply with Gemini and insert it into the response field.
+- **GetYourGuide support** at `https://supplier.getyourguide.com/performance/reviews`.
+- Reply button injection in the GetYourGuide review response modal.
 
 ### Changed
-
-- Extension name updated to "Reply by AI for Viator & GetYourGuide". Description and prompt text generalized for both platforms.
-- Content script and review extraction made site-agnostic; placeholder text (e.g. "Type your response here", "Reply will be checked with AI") is excluded when detecting review body on GYG.
-
----
+- Extension naming and messaging updated to cover both Viator and GetYourGuide.
+- Content extraction generalized; ignores UI placeholder lines when reading review content.
 
 ## [1.1.0] - 2026-03-13
 
 ### Added
-
-- **Pro edition**: Optional $1 upgrade via license key. Unlock more options (Pro-only features to be added in future releases).
-- Pro section in options: "Get Pro" link to ai.majidorc.com checkout, license key input, Activate/Deactivate. Pro status stored in `chrome.storage.sync` (`proActivated`, `proLicenseKey`).
-- License validation: background script calls `https://ai.majidorc.com/api/extension/validate?key=...`; options page activates Pro when the key is valid.
-- Host permission for `https://ai.majidorc.com/*` for license API.
-
-### Changed
-
-- Version set to 1.1.0. Future updates or new features should bump version (e.g. 1.2.0, 1.1.1) and add an entry here.
-
----
+- Pro edition architecture (checkout/license activation) in the extension UI.
+- License-key activation/deactivation controls in options.
+- Background license validation against `https://ai.majidorc.com/api/extension/validate`.
 
 ## [1.0.0] - 2026-03-13
 
 ### Added
-
-- Initial release.
-- **Reply by AI** button on Viator supplier reviews page (`https://supplier.viator.com/reviews`), injected below the reply text area in the "Respond to review" modal.
-- Integration with Google Gemini API (Gemini 2.5 Flash Lite) to generate reply suggestions from the visible review text.
-- Options page to save and clear the user's Gemini API key (stored in `chrome.storage.sync`).
-- Reply formatting:
-  - Salutation: "Dear [reviewer name]," (falls back to "Guest" if name cannot be detected).
-  - Body: short, professional reply generated by Gemini.
-  - Sign-off: "Best regards, [supplier name] Team" (supplier name read from the page header when available).
-- Reviewer name extraction from the modal (avoids using the review date as the name).
-- Supplier name extraction from the top-right area of the Viator supplier page.
-- MutationObserver-based injection so the button appears when the reply modal is opened.
-- Single-purpose permissions: `storage` and host access only for Viator reviews and the Gemini API.
-- Store icon (128×128 px) and manifest metadata for Chrome Web Store listing.
+- Initial release for Viator reviews.
+- **Reply by AI** button in Viator's response modal.
+- Gemini integration (`gemini-2.5-flash-lite`) for suggested replies.
+- Options page for storing Gemini API key in `chrome.storage.sync`.
+- Reviewer/supplier extraction and auto-inserted formatted reply.
+- MutationObserver-based modal detection and injection.
+- Minimal required permissions and store-ready manifest/icon setup.
 
 ### Security
-
-- API key is used only in the background service worker; it is never injected into the page or content script.
-
----
-
-Copyright © Anywhere.tours
+- Gemini API key is handled in the background worker and not injected into page scripts.

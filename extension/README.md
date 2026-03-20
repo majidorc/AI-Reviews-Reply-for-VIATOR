@@ -1,70 +1,75 @@
-# Viator "Reply by AI" Chrome Extension
+# Reply by AI for Viator & GetYourGuide
 
-Generate AI-powered replies to Viator supplier reviews using Google Gemini. Add a **Reply by AI** button in the review response modal and get professional, personalized reply suggestions in one click.
+Generate AI-powered replies for supplier reviews on Viator and GetYourGuide using Google Gemini.
+
+The extension adds a **Reply by AI** button inside the review response modal and fills a suggested reply in one click.
+
+## Supported Platforms
+
+- [Viator supplier reviews](https://supplier.viator.com/reviews)
+- [GetYourGuide supplier reviews](https://supplier.getyourguide.com/performance/reviews)
 
 ## Features
 
-- **Reply by AI** button on [Viator supplier reviews](https://supplier.viator.com/reviews) — appears below the reply text area when you open "Respond to review"
-- **Gemini 2.5 Flash Lite** — uses Google's Gemini API for fast, natural reply generation
-- **Formatted replies** — salutation (Dear [reviewer name]), body, and sign-off (Best regards, [Your business name] Team)
-- **Settings** — store your Gemini API key in the extension options (key stays local, used only to call the API)
+- **One-click reply generation** in the review response modal
+- **Gemini-powered responses** (Gemini 2.5 Flash Lite)
+- **Same-language replies** as the customer review (for example German review -> German reply)
+- **GetYourGuide limit handling**: replies are kept within the 400-character limit
+- **Popup on extension icon click** with quick access to settings
+- **Optional company name setting** for sign-off fallback (for example: `Best regards, The AnyWhere.com Team`)
+- **Local key storage**: API key is saved in `chrome.storage.sync`
 
 ## Requirements
 
-- Chrome (or a Chromium-based browser)
-- A [Gemini API key](https://aistudio.google.com/app/apikey) from Google AI Studio (free tier available)
+- Chrome (or another Chromium-based browser)
+- A [Gemini API key](https://aistudio.google.com/app/apikey) (free tier available)
 
-## Installation
-
-### From source (developer / unpacked)
+## Installation (Unpacked)
 
 1. Clone or download this repository.
 2. Open Chrome and go to `chrome://extensions`.
-3. Turn on **Developer mode** (top right).
-4. Click **Load unpacked** and select the folder containing `manifest.json`.
-
-### From Chrome Web Store
-
-Install from the [Chrome Web Store](https://chrome.google.com/webstore) once the extension is published (search for "Viator Reply by AI").
+3. Enable **Developer mode**.
+4. Click **Load unpacked**.
+5. Select this `extension` folder (the one containing `manifest.json`).
 
 ## Setup
 
-1. After installing, click the extension icon and choose **Options**, or right-click the icon and select **Options**.
-2. Enter your [Gemini API key](https://aistudio.google.com/app/apikey) and click **Save**.
-3. Go to [https://supplier.viator.com/reviews](https://supplier.viator.com/reviews).
+1. Click the extension icon and open **Options**.
+2. Paste your Gemini API key and click **Save**.
+3. (Optional) Set **Company / business name** for reply sign-off fallback.
 
 ## Usage
 
-1. On the Viator supplier reviews page, click **Respond to review** on any review.
-2. In the reply modal, below the large text area, click **Reply by AI**.
-3. The extension reads the review, calls Gemini, and fills the reply box with a suggested reply (Dear [reviewer], body, Best regards, [Your business] Team).
-4. Edit the text if you like, then click **Submit** as usual.
+1. Open the reviews page on Viator or GetYourGuide.
+2. Open a review reply modal (`Respond to review` / `Reply to the traveler`).
+3. Click **Reply by AI** under the textarea.
+4. Review and edit the generated text, then submit as normal.
 
 ## Permissions
 
-- **storage** — to save and read your Gemini API key in extension options.
-- **https://supplier.viator.com/reviews** — so the content script and "Reply by AI" button run only on the reviews page.
-- **https://generativelanguage.googleapis.com/** — so the background script can call the Gemini API with your key.
+- `storage` - save and read extension settings (API key, optional company name)
+- `https://supplier.viator.com/reviews` - run the content script on Viator reviews page
+- `https://supplier.getyourguide.com/performance/reviews` - run the content script on GetYourGuide reviews page
+- `https://generativelanguage.googleapis.com/*` - call Gemini API
 
 ## Privacy
 
-- Your API key is stored locally in the browser and is only used to request reply text from Google's Gemini API.
-- When you click "Reply by AI", the visible review title and body (and reviewer/supplier names from the page) are sent to the Gemini API to generate the reply. No data is sent to any other servers.
+- Your Gemini API key is stored locally in the browser (`chrome.storage.sync`).
+- Review content is sent only to Google's Gemini API when you click **Reply by AI**.
+- The extension does not send review data to any custom backend.
 
-See **[PRIVACY.md](PRIVACY.md)** for the full privacy policy.
-
-## License
-
-MIT (or as specified in the repository).
+See [PRIVACY.md](PRIVACY.md) for the full privacy policy.
 
 ## Versioning
 
-The extension version is in `manifest.json` (`version`). When you add a feature or fix, bump the version (e.g. 1.1.0 → 1.1.1 or 1.2.0) and add an entry to `CHANGELOG.md`.
+Current version is in `manifest.json` (`version`), currently `1.3.3`.
+
+When you change behavior or features:
+- bump `manifest.json` version
+- add a matching entry in `CHANGELOG.md`
 
 ## Repository
 
 [AI Reviews Reply for VIATOR](https://github.com/majidorc/AI-Reviews-Reply-for-VIATOR)
-
----
 
 Copyright © Anywhere.tours
