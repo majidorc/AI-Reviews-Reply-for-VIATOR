@@ -62,7 +62,7 @@ See [PRIVACY.md](PRIVACY.md) for the full privacy policy.
 
 ## Versioning
 
-Current version is in `manifest.json` (`version`), currently `1.3.3`.
+Current version is in `manifest.json` (`version`), currently `1.3.4`.
 
 When you change behavior or features:
 - bump `manifest.json` version

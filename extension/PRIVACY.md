@@ -8,7 +8,7 @@ This privacy policy describes how the Viator "Reply by AI" Chrome Extension ("th
 
 ## Summary
 
-- The Extension runs only on **https://supplier.viator.com/reviews**.
+- The Extension runs on **https://supplier.viator.com/reviews** and **https://supplier.getyourguide.com/performance/reviews**.
 - Your **Gemini API key** is stored **only on your device** in the browser’s extension storage. We do not have access to it.
 - When you use **Reply by AI**, the **review text and related on-screen information** are sent **only to Google’s Gemini API** to generate a reply. We do not receive, store, or process this data on our own servers.
 - We do **not** collect, sell, or share your personal data.
@@ -21,11 +21,11 @@ This privacy policy describes how the Viator "Reply by AI" Chrome Extension ("th
 
 - **Gemini API key** — If you enter it in the Extension’s options page, it is saved locally in your browser (Chrome’s extension storage). It is used only by the Extension to call Google’s Gemini API when you click "Reply by AI". The key never leaves your device except in those API requests to Google.
 
-### 1.2 Read from the Viator page (only when you click "Reply by AI")
+### 1.2 Read from the page (only when you click "Reply by AI")
 
-- **Review content** — The visible review title and body in the reply modal.
+- **Review content** — The visible review title and body in the reply modal on Viator or GetYourGuide.
 - **Reviewer name** — The name shown next to the review (e.g. username) to personalize the salutation.
-- **Supplier/business name** — The name shown in the top-right area of the Viator supplier page, used in the sign-off (e.g. "Best regards, [Your business] Team").
+- **Supplier/business name** — The name shown on the supplier page (e.g. top-right on Viator), used in the sign-off (e.g. "Best regards, [Your business] Team").
 
 This information is read only from the page you are viewing and is **sent only to Google’s Gemini API** to generate the reply text. It is **not** sent to Anywhere.tours or any other third party.
 
@@ -34,7 +34,7 @@ This information is read only from the page you are viewing and is **sent only t
 We do **not** collect, store, or transmit:
 
 - Your name, email, or other account details  
-- Browsing history outside the Viator supplier reviews page  
+- Browsing history outside the Viator and GetYourGuide supplier review pages above  
 - Passwords or login credentials (other than your own API key, which you optionally store locally)  
 - Payment or financial information  
 - Any data for advertising or analytics on our side  
@@ -57,7 +57,8 @@ We do **not** collect, store, or transmit:
 The Extension requests:
 
 - **Storage** — To save and read your Gemini API key locally in the extension options.
-- **Access to https://supplier.viator.com/reviews** — So the "Reply by AI" button and logic run only on that page.
+- **Access to https://supplier.viator.com/reviews** — So the "Reply by AI" button and logic run on the Viator supplier reviews page.
+- **Access to https://supplier.getyourguide.com/performance/reviews** — So the same runs on the GetYourGuide supplier reviews page.
 - **Access to https://generativelanguage.googleapis.com/** — So the Extension can call the Gemini API with your key when you use "Reply by AI".
 
 No other permissions are requested.

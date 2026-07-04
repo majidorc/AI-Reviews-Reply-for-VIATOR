@@ -4,6 +4,11 @@ All notable changes to the Reply by AI Chrome Extension (Viator & GetYourGuide).
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.4] - 2026-07-05
+
+### Fixed
+- **GetYourGuide:** Reply modal detection when the panel has no `role="dialog"` / `modal` class (find by “Type your response here”, “Reply to the traveler”, shadow DOM). React-friendly textarea updates so generated text appears in the box.
+
 ## [1.3.3] - 2026-03-13
 
 ### Added

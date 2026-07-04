@@ -9,19 +9,127 @@
     'Reply will be checked with AI',
     'Send reply',
   ];
+  const REPLY_PANEL_MARKERS = [
+    'reply to the traveler',
+    'respond to review',
+    'type your response',
+    'send reply',
+    'read faq',
+  ];
+
+  function isGetYourGuide() {
+    return window.location.hostname.includes('getyourguide');
+  }
+
+  function isVisibleEnough(el) {
+    if (!el || !(el instanceof Element)) return false;
+    const st = window.getComputedStyle(el);
+    if (st.display === 'none' || st.visibility === 'hidden') return false;
+    const rect = el.getBoundingClientRect();
+    return rect.width > 0 || rect.height > 0;
+  }
+
+  /** Walk open shadow roots — GYG/Viator modals may render inside web components. */
+  function queryAllDeep(selector, root = document) {
+    const out = [];
+    const visit = (node) => {
+      if (!node) return;
+      if (node.nodeType === Node.DOCUMENT_FRAGMENT_NODE || node.nodeType === Node.DOCUMENT_NODE) {
+        node.querySelectorAll(selector).forEach((el) => out.push(el));
+        node.querySelectorAll('*').forEach((el) => {
+          if (el.shadowRoot) visit(el.shadowRoot);
+        });
+        return;
+      }
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        node.querySelectorAll(selector).forEach((el) => out.push(el));
+        node.querySelectorAll('*').forEach((el) => {
+          if (el.shadowRoot) visit(el.shadowRoot);
+        });
+      }
+    };
+    visit(root);
+    return out;
+  }
+
+  function textareaLooksLikeReplyBox(ta) {
+    const ph = (ta.getAttribute('placeholder') || '').toLowerCase();
+    const aria = (ta.getAttribute('aria-label') || '').toLowerCase();
+    return REPLY_PLACEHOLDER_TEXTS.some((p) => {
+      const pl = p.toLowerCase();
+      return ph.includes(pl) || ph.includes('response') || aria.includes(pl) || aria.includes('response');
+    });
+  }
+
+  function findReplyPanelRoot(textarea) {
+    const candidates = [];
+    let el = textarea.parentElement;
+    for (let i = 0; i < 30 && el; i++, el = el.parentElement) {
+      if (!el.contains(textarea)) break;
+      const text = el.innerText || '';
+      if (text.length > 14000 || text.length < 25) continue;
+      const lower = text.toLowerCase();
+      if (REPLY_PANEL_MARKERS.some((m) => lower.includes(m))) {
+        candidates.push({ el, len: text.length });
+      }
+    }
+    if (candidates.length) {
+      candidates.sort((a, b) => a.len - b.len);
+      return candidates[0].el;
+    }
+    return (
+      textarea.closest('[role="dialog"], [class*="modal"], [class*="Modal"], [class*="dialog"], [class*="overlay"], [class*="Overlay"]')
+      || textarea.parentElement?.parentElement
+      || document.body
+    );
+  }
 
   function findReplyModal() {
-    const dialog = document.querySelector('[role="dialog"]');
-    if (dialog) {
+    const dialogs = queryAllDeep('[role="dialog"]');
+    for (const dialog of dialogs) {
       const textarea = dialog.querySelector('textarea');
-      if (textarea) return { modal: dialog, textarea };
+      if (textarea && isVisibleEnough(textarea)) {
+        return { modal: dialog, textarea };
+      }
     }
-    const textareas = document.querySelectorAll('textarea');
+
+    const textareas = queryAllDeep('textarea');
     for (const ta of textareas) {
+      if (!isVisibleEnough(ta)) continue;
       const modal = ta.closest('[role="dialog"], [class*="modal"], [class*="Modal"], [class*="dialog"]');
       if (modal) return { modal, textarea: ta };
     }
+
+    for (const ta of textareas) {
+      if (!isVisibleEnough(ta)) continue;
+      if (!textareaLooksLikeReplyBox(ta)) continue;
+      return { modal: findReplyPanelRoot(ta), textarea: ta };
+    }
+
+    if (isGetYourGuide()) {
+      for (const ta of textareas) {
+        if (!isVisibleEnough(ta)) continue;
+        const root = findReplyPanelRoot(ta);
+        const lower = (root.innerText || '').toLowerCase();
+        if (lower.includes('reply to the traveler') || lower.includes('send reply')) {
+          return { modal: root, textarea: ta };
+        }
+      }
+    }
+
     return null;
+  }
+
+  function setTextareaValue(textarea, text) {
+    const proto = window.HTMLTextAreaElement?.prototype;
+    const setter = proto && Object.getOwnPropertyDescriptor(proto, 'value')?.set;
+    if (setter) {
+      setter.call(textarea, text);
+    } else {
+      textarea.value = text;
+    }
+    textarea.dispatchEvent(new Event('input', { bubbles: true }));
+    textarea.dispatchEvent(new Event('change', { bubbles: true }));
   }
 
   function getReviewFromModal(modal) {
@@ -44,11 +152,23 @@
     if (!reviewBody) {
       const all = modal.innerText || '';
       const lines = all.split(/\n/).map((s) => s.trim()).filter(Boolean);
-      const skip = (t) => REPLY_PLACEHOLDER_TEXTS.some((p) => t === p || t.startsWith(p));
+      const skip = (t) => {
+        const l = t.toLowerCase();
+        if (REPLY_PLACEHOLDER_TEXTS.some((p) => t === p || t.startsWith(p))) return true;
+        if (l === 'reply to the traveler') return true;
+        if (l === 'send reply' || l === 'read faq') return true;
+        if (l.includes('reply will be checked with ai')) return true;
+        if (/^\d+\s*\/\s*400$/.test(l)) return true;
+        return false;
+      };
       const contentLines = lines.filter((t) => !skip(t) && t.length > 10);
       if (contentLines.length > 0) reviewTitle = contentLines[0];
       if (contentLines.length > 1) reviewBody = contentLines.slice(1).join('\n').trim();
       else if (contentLines.length === 1 && contentLines[0].length > 20) reviewBody = contentLines[0];
+      if (!reviewBody && contentLines.length) {
+        const byLen = [...contentLines].sort((a, b) => b.length - a.length);
+        reviewBody = byLen.find((l) => l.length > 25 && !looksLikeDate(l)) || '';
+      }
     }
     if (reviewBody && REPLY_PLACEHOLDER_TEXTS.some((p) => reviewBody.includes(p))) {
       reviewBody = reviewBody.replace(new RegExp(REPLY_PLACEHOLDER_TEXTS.map((p) => p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|'), 'gi'), '').trim();
@@ -160,14 +280,17 @@
     wrapper.appendChild(btn);
     wrapper.appendChild(messageEl);
 
-    textarea.parentNode.insertBefore(wrapper, textarea.nextSibling);
+    const host = textarea.parentElement || textarea;
+    host.insertAdjacentElement('afterend', wrapper);
 
     btn.addEventListener('click', async () => {
-      const modal = textarea.closest('[role="dialog"], [class*="modal"], [class*="Modal"], [class*="dialog"]') || textarea.getRootNode().body;
+      const modal =
+        textarea.closest('[role="dialog"], [class*="modal"], [class*="Modal"], [class*="dialog"]')
+        || findReplyPanelRoot(textarea);
       const { reviewTitle, reviewBody } = getReviewFromModal(modal);
       const reviewerName = getReviewerNameFromModal(modal);
       const supplierName = getSupplierNameFromPage();
-      const isGYG = window.location.hostname.includes('getyourguide');
+      const isGYG = isGetYourGuide();
       const maxChars = isGYG ? 400 : (textarea.getAttribute('maxlength') ? parseInt(textarea.getAttribute('maxlength'), 10) : null);
       btn.disabled = true;
       btn.textContent = 'Generating…';
@@ -194,13 +317,12 @@
           messageEl.style.color = '#dc2626';
         } else if (response?.text) {
           let text = response.text;
-          const maxLen = textarea.getAttribute('maxlength');
+          const maxLen = isGYG ? 400 : textarea.getAttribute('maxlength');
           if (maxLen) {
             const n = parseInt(maxLen, 10);
             if (!isNaN(n) && text.length > n) text = text.slice(0, n);
           }
-          textarea.value = text;
-          textarea.dispatchEvent(new Event('input', { bubbles: true }));
+          setTextareaValue(textarea, text);
           messageEl.textContent = 'Reply inserted. You can edit before submitting.';
           messageEl.style.color = '#059669';
         } else {
@@ -222,7 +344,9 @@
     const found = findReplyModal();
     if (!found) return;
     const { textarea } = found;
-    if (textarea.hasAttribute(INJECTED_ATTR)) return;
+    const host = textarea.parentElement || textarea;
+    if (host.nextElementSibling?.hasAttribute?.(INJECTED_ATTR)) return;
+    if (textarea.nextElementSibling?.hasAttribute?.(INJECTED_ATTR)) return;
     createReplyByAIButton(textarea);
   }
 
